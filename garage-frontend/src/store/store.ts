@@ -1,19 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from './slices/authSlice';
-import garageSlice from './slices/garageSlice';
+import authReducer from './slices/authSlice';
+import customerReducer from './slices/customerSlice';
 
 export const store = configureStore({
   reducer: {
-    auth: authSlice,
-    garage: garageSlice,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+    auth: authReducer,
+    customers: customerReducer
+  }
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-export default store;

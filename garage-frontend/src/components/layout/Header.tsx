@@ -1,22 +1,46 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, IconButton } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useDispatch } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
+import { AppDispatch } from '../../store/store';
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Box,
+  Menu,
+  MenuItem
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 interface HeaderProps {
-  onDrawerToggle: () => void;
+  onMenuClick: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
+const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
+    handleClose();
+  };
+
+  const handleProfile = () => {
+    // navigate('/profile'); // Future implementation
+    handleClose();
   };
 
   return (
@@ -26,23 +50,45 @@ const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
           color="inherit"
           aria-label="open drawer"
           edge="start"
-          onClick={onDrawerToggle}
-          sx={{ mr: 2 }}
+          onClick={onMenuClick}
+          sx={{ mr: 2, display: { sm: 'none' } }}
         >
           <MenuIcon />
         </IconButton>
+
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-          Garage Management System
+          Garage Management
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {user && (
-            <Typography variant="body2" sx={{ mr: 2 }}>
-              Welcome, {user.username}
-            </Typography>
-          )}
-          <Button color="inherit" onClick={handleLogout}>
-            Logout
-          </Button>
+
+        <Box>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleProfile}>Profile</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
         </Box>
       </Toolbar>
     </AppBar>

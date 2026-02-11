@@ -1,136 +1,162 @@
-import React, { useState } from 'react';
-import { 
-  Container, 
-  Box, 
-  TextField, 
-  Button, 
-  Typography, 
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { register, reset } from '../store/slices/authSlice';
+import { RootState, AppDispatch } from '../store/store';
+import {
+  Container,
   Paper,
+  TextField,
+  Button,
+  Typography,
+  Box,
   Alert,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  CircularProgress
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../hooks';
-import { register } from '../store/slices/authSlice';
 
 const Register: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('mechanic');
-  const [error, setError] = useState('');
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      console.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!username || !email || !password) {
-      setError('Please fill in all fields');
+
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
       return;
     }
 
-    try {
-      const result = await dispatch(register({ username, email, password, role }));
-      
-      if (register.fulfilled.match(result)) {
-        navigate('/dashboard');
-      } else {
-        setError(result.payload || 'Registration failed');
-      }
-    } catch (err) {
-      setError('An error occurred during registration');
-    }
+    const userData = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password
+    };
+
+    dispatch(register(userData));
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container maxWidth="sm">
       <Box
         sx={{
-          marginTop: 8,
+          minHeight: '100vh',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
         <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
-          <Typography component="h1" variant="h5" align="center">
-            Sign Up
+          <Typography variant="h4" align="center" gutterBottom>
+            Garage Management System
           </Typography>
-          {error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {error}
+
+          <Typography variant="h5" align="center" gutterBottom>
+            Register
+          </Typography>
+
+          {isError && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {message}
             </Alert>
           )}
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+
+          <form onSubmit={handleSubmit}>
             <TextField
-              margin="normal"
-              required
               fullWidth
-              id="username"
               label="Username"
               name="username"
-              autoComplete="username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
+              value={formData.username}
+              onChange={handleChange}
               margin="normal"
               required
+            />
+
+            <TextField
               fullWidth
-              id="email"
-              label="Email Address"
+              label="Email"
               name="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
               margin="normal"
               required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
             />
-            <FormControl fullWidth margin="normal" required>
-              <InputLabel id="role-label">Role</InputLabel>
-              <Select
-                labelId="role-label"
-                id="role"
-                value={role}
-                label="Role"
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="manager">Manager</MenuItem>
-                <MenuItem value="mechanic">Mechanic</MenuItem>
-              </Select>
-            </FormControl>
+
+            <TextField
+              fullWidth
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              margin="normal"
+              required
+            />
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
+              disabled={isLoading}
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              {isLoading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                'Register'
+              )}
             </Button>
-            <Box sx={{ textAlign: 'center' }}>
-              <Link to="/login" style={{ textDecoration: 'none' }}>
-                <Typography variant="body2">
-                  Already have an account? Sign In
-                </Typography>
-              </Link>
+
+            <Box textAlign="center">
+              <Typography variant="body2">
+                Already have an account?{' '}
+                <Link to="/login" style={{ textDecoration: 'none' }}>
+                  Login here
+                </Link>
+              </Typography>
             </Box>
-          </Box>
+          </form>
         </Paper>
       </Box>
     </Container>

@@ -1,91 +1,74 @@
 import React from 'react';
-import { 
-  Drawer, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
-  ListItemText, 
-  Divider,
-  IconButton,
-  Box
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar
 } from '@mui/material';
-import { 
-  Dashboard as DashboardIcon, 
-  People as CustomersIcon, 
-  DirectionsCar as VehiclesIcon, 
-  Build as ServicesIcon, 
-  Settings as SettingsIcon,
-  Menu as MenuIcon
-} from '@mui/icons-material';
-import { Link, useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleIcon from '@mui/icons-material/People';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import BuildIcon from '@mui/icons-material/Build';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+const drawerWidth = 240;
 
 interface SidebarProps {
   mobileOpen: boolean;
-  handleDrawerToggle: () => void;
+  onClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, handleDrawerToggle }) => {
+const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAppSelector((state) => state.auth);
-
-  const drawerWidth = 240;
 
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'Customers', icon: <CustomersIcon />, path: '/customers' },
-    { text: 'Vehicles', icon: <VehiclesIcon />, path: '/vehicles' },
-    { text: 'Services', icon: <ServicesIcon />, path: '/services' },
+    { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
+    { text: 'Customers', icon: <PeopleIcon />, path: '/customers' },
+    { text: 'Vehicles', icon: <DirectionsCarIcon />, path: '/vehicles' },
+    { text: 'Service Requests', icon: <BuildIcon />, path: '/service-requests' },
   ];
-
-  // Only add settings if user is admin
-  if (user?.role === 'admin') {
-    menuItems.push({ text: 'Settings', icon: <SettingsIcon />, path: '/settings' });
-  }
 
   const drawer = (
     <div>
-      <Box sx={{ padding: '16px 16px 8px 16px' }}>
-        <h2>Garage System</h2>
+      <Toolbar />
+      <Box sx={{ overflow: 'auto' }}>
+        <List>
+          {menuItems.map((item) => (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  navigate(item.path);
+                  onClose();
+                }}
+                selected={location.pathname === item.path}
+              >
+                <ListItemIcon>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
       </Box>
-      <Divider />
-      <List>
-        {menuItems.map((item, index) => (
-          <ListItem 
-            button 
-            key={item.text}
-            component={Link}
-            to={item.path}
-            selected={location.pathname === item.path}
-            sx={{
-              backgroundColor: location.pathname === item.path ? 'primary.main' : 'inherit',
-              color: location.pathname === item.path ? 'white' : 'inherit',
-              '&:hover': {
-                backgroundColor: location.pathname === item.path ? 'primary.dark' : 'action.hover',
-              },
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                color: location.pathname === item.path ? 'white' : 'inherit',
-              }}
-            >
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
-      </List>
     </div>
   );
 
   return (
-    <>
-      {/* Temporary drawer for mobile */}
+    <Box
+      component="nav"
+      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      aria-label="mailbox folders"
+    >
       <Drawer
         variant="temporary"
         open={mobileOpen}
-        onClose={handleDrawerToggle}
+        onClose={onClose}
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.
         }}
@@ -96,8 +79,6 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, handleDrawerToggle }) => 
       >
         {drawer}
       </Drawer>
-      
-      {/* Permanent drawer for desktop */}
       <Drawer
         variant="permanent"
         sx={{
@@ -108,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, handleDrawerToggle }) => 
       >
         {drawer}
       </Drawer>
-    </>
+    </Box>
   );
 };
 

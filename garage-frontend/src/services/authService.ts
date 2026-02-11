@@ -1,57 +1,51 @@
-import axios from 'axios';
-import { User, LoginCredentials, RegisterCredentials } from '../types';
+import api from './api';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+export interface LoginData {
+  email: string;
+  password: string;
+}
 
-// Create axios instance
-const api = axios.create({
-  baseURL: API_URL,
-});
+export interface RegisterData {
+  username: string;
+  email: string;
+  password: string;
+  role?: string;
+}
 
-// Add token to requests if available
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+export interface AuthResponse {
+  _id: string;
+  username: string;
+  email: string;
+  role: string;
+  token: string;
+}
 
-// Login user
-export const login = async (email: string, password: string) => {
-  const response = await api.post('/auth/login', { email, password });
+const register = async (userData: RegisterData): Promise<AuthResponse> => {
+  const response = await api.post<AuthResponse>('/auth/register', userData);
   return response.data;
 };
 
-// Register user
-export const register = async (
-  username: string,
-  email: string,
-  password: string,
-  role?: string
-) => {
-  const response = await api.post('/auth/register', { username, email, password, role });
+const login = async (userData: LoginData): Promise<AuthResponse> => {
+  const response = await api.post<AuthResponse>('/auth/login', userData);
   return response.data;
 };
 
-// Get current user
-export const getCurrentUser = async (token: string | null) => {
-  if (!token) {
-    throw new Error('No token provided');
-  }
-
-  const response = await api.get('/auth/me', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
-};
-
-// Logout user
-export const logout = async () => {
-  // Clear token from local storage
+const logout = (): void => {
+  localStorage.removeItem('user');
   localStorage.removeItem('token');
 };
 
-export default api;
+const getCurrentUser = (): AuthResponse | null => {
+  const userStr = localStorage.getItem('user');
+  if (userStr) {
+    return JSON.parse(userStr);
+  }
+  return null;
+};
+
+export default {
+  register,
+  login,
+  logout,
+  getCurrentUser
+};

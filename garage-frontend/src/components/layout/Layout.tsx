@@ -1,53 +1,37 @@
-import React, { useState } from 'react';
-import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { Box, CssBaseline } from '@mui/material';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#e57373',
-    },
-    background: {
-      default: '#f5f5f5',
-    },
-  },
-});
-
 const Layout: React.FC = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Header onDrawerToggle={handleDrawerToggle} />
-        <Sidebar 
-          mobileOpen={mobileOpen} 
-          handleDrawerToggle={handleDrawerToggle} 
-        />
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            width: { sm: `calc(100% - 240px)` },
-            minHeight: '100vh',
-            marginTop: '64px',
-          }}
-        >
-          <Outlet />
-        </Box>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <Header onMenuClick={handleDrawerToggle} />
+
+      <Sidebar
+        mobileOpen={mobileOpen}
+        onClose={handleDrawerToggle}
+      />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - 240px)` },
+          marginTop: '64px'
+        }}
+      >
+        <Outlet />
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 };
 
