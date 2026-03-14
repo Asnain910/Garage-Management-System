@@ -1,0 +1,38 @@
+﻿src/__tests__/App.test.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/__tests__/App.test.tsx(2,32): error TS2307: Cannot find module '@testing-library/react' or its corresponding type declarations.
+src/__tests__/App.test.tsx(7,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+src/__tests__/App.test.tsx(8,3): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+src/__tests__/App.test.tsx(17,5): error TS2304: Cannot find name 'expect'.
+src/App.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/App.tsx(26,16): error TS2559: Type '{ children: Element; }' has no properties in common with type 'IntrinsicAttributes'.
+src/App.tsx(31,16): error TS2559: Type '{ children: Element; }' has no properties in common with type 'IntrinsicAttributes'.
+src/App.tsx(36,16): error TS2559: Type '{ children: Element; }' has no properties in common with type 'IntrinsicAttributes'.
+src/App.tsx(41,16): error TS2559: Type '{ children: Element; }' has no properties in common with type 'IntrinsicAttributes'.
+src/App.tsx(46,16): error TS2559: Type '{ children: Element; }' has no properties in common with type 'IntrinsicAttributes'.
+src/App.tsx(51,16): error TS2559: Type '{ children: Element; }' has no properties in common with type 'IntrinsicAttributes'.
+src/pages/Dashboard.tsx(21,22): error TS2339: Property 'garage' does not exist on type '{ auth: AuthState; customers: CustomerState; }'.
+src/pages/Dashboard.tsx(132,45): error TS7006: Parameter 'customer' implicitly has an 'any' type.
+src/pages/ServiceRequests.tsx(20,72): error TS2339: Property 'garage' does not exist on type '{ auth: AuthState; customers: CustomerState; }'.
+src/pages/ServiceRequests.tsx(51,39): error TS7006: Parameter 'request' implicitly has an 'any' type.
+src/pages/Settings.tsx(5,3): error TS6133: 'Box' is declared but its value is never read.
+src/pages/Vehicles.tsx(20,65): error TS2339: Property 'garage' does not exist on type '{ auth: AuthState; customers: CustomerState; }'.
+src/pages/Vehicles.tsx(51,32): error TS7006: Parameter 'vehicle' implicitly has an 'any' type.
+src/store/slices/customerSlice.ts(2,37): error TS6133: 'CustomerResponse' is declared but its value is never read.
+src/store/slices/garageSlice.ts(4,3): error TS2614: Module '"../../services/api"' has no exported member 'getCustomers'. Did you mean to use 'import getCustomers from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(5,3): error TS2614: Module '"../../services/api"' has no exported member 'getCustomerById'. Did you mean to use 'import getCustomerById from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(6,3): error TS2614: Module '"../../services/api"' has no exported member 'createCustomer'. Did you mean to use 'import createCustomer from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(7,3): error TS2614: Module '"../../services/api"' has no exported member 'updateCustomer'. Did you mean to use 'import updateCustomer from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(8,3): error TS2614: Module '"../../services/api"' has no exported member 'deleteCustomer'. Did you mean to use 'import deleteCustomer from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(9,3): error TS2614: Module '"../../services/api"' has no exported member 'getVehicles'. Did you mean to use 'import getVehicles from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(10,3): error TS2614: Module '"../../services/api"' has no exported member 'getVehicleById'. Did you mean to use 'import getVehicleById from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(11,3): error TS2614: Module '"../../services/api"' has no exported member 'createVehicle'. Did you mean to use 'import createVehicle from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(12,3): error TS2614: Module '"../../services/api"' has no exported member 'updateVehicle'. Did you mean to use 'import updateVehicle from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(13,3): error TS2614: Module '"../../services/api"' has no exported member 'deleteVehicle'. Did you mean to use 'import deleteVehicle from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(14,3): error TS2614: Module '"../../services/api"' has no exported member 'getServiceRequests'. Did you mean to use 'import getServiceRequests from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(15,3): error TS2614: Module '"../../services/api"' has no exported member 'getServiceRequestById'. Did you mean to use 'import getServiceRequestById from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(16,3): error TS2614: Module '"../../services/api"' has no exported member 'createServiceRequest'. Did you mean to use 'import createServiceRequest from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(17,3): error TS2614: Module '"../../services/api"' has no exported member 'updateServiceRequest'. Did you mean to use 'import updateServiceRequest from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(18,3): error TS2614: Module '"../../services/api"' has no exported member 'deleteServiceRequest'. Did you mean to use 'import deleteServiceRequest from "../../services/api"' instead?
+src/store/slices/garageSlice.ts(103,13): error TS6133: 'response' is declared but its value is never read.
+src/store/slices/garageSlice.ts(164,13): error TS6133: 'response' is declared but its value is never read.
+src/store/slices/garageSlice.ts(225,13): error TS6133: 'response' is declared but its value is never read.
